@@ -1,8 +1,14 @@
+import 'dart:async';
+
+import 'package:common_tools/utils/logs.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-
-  runApp(const MyApp());
+  printLog('[main] ===== START main.dart =======');
+  /// -------- 在其自己的错误区域中运行body ------------///
+  runZonedGuarded(() async {
+    runApp(const MyApp());
+  },printError);
 }
 
 class MyApp extends StatelessWidget {
