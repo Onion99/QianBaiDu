@@ -7,6 +7,7 @@ void main() {
   printLog('[main] ===== START main.dart =======');
   /// -------- 在其自己的错误区域中运行body ------------///
   runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
     runApp(const MyApp());
   },printError);
 }
