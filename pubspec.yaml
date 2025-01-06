@@ -1,5 +1,5 @@
-name: super_todo
-description: "一个致力于改变人生习惯的App.An app dedicated to transforming life habits."
+name: ascii_generrator
+description: "基于 https://github.com/vietnh1009/ASCII-generator 的Flutter实现"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
