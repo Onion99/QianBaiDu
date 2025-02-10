@@ -1,4 +1,4 @@
-name: ascii_generrator
+name: qian_bai_du
 description: "基于 https://github.com/vietnh1009/ASCII-generator 的Flutter实现"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
