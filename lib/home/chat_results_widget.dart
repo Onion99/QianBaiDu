@@ -242,7 +242,7 @@ class ChatResultsWidget extends StatelessWidget {
   }
 
 
-  final double iconSize = 49;
+  final double iconSize = 54;
 
   Widget _buildGlassIcon(IconData icon) {
     return Container(
