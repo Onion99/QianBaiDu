@@ -103,7 +103,7 @@ class ChatDetailWidget extends StatelessWidget {
           // 底部输入框
           const SizedBox(height: 12),
           Container(
-            padding: const EdgeInsets.only(left: 16,right: 4,top: 4,bottom: 4),
+            padding: const EdgeInsets.only(left: 16, right: 4, top: 4, bottom: 4),
             decoration: BoxDecoration(
               color: Colors.grey[200],
               borderRadius: BorderRadius.circular(39),
@@ -167,7 +167,8 @@ class _SendButtonAnimation extends StatefulWidget {
   State<_SendButtonAnimation> createState() => _SendButtonAnimationState();
 }
 
-class _SendButtonAnimationState extends State<_SendButtonAnimation> with SingleTickerProviderStateMixin {
+class _SendButtonAnimationState extends State<_SendButtonAnimation>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _scaleAnimation;
 
