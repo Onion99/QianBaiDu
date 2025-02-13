@@ -180,8 +180,8 @@ class _SendButtonAnimationState extends State<_SendButtonAnimation> with SingleT
     );
 
     _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.9,
+      begin: 1.1,
+      end: 0.7,
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
