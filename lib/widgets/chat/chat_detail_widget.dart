@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui'; // 为了使用 ImageFilter
 
 import '../../common/theme/colors.dart';
 
@@ -103,27 +104,43 @@ class ChatDetailWidget extends StatelessWidget {
           // 底部输入框
           const SizedBox(height: 12),
           Container(
-            padding: const EdgeInsets.only(left: 16, right: 4, top: 4, bottom: 4),
             decoration: BoxDecoration(
-              color: Colors.grey[200],
+              color: Colors.black12,
               borderRadius: BorderRadius.circular(39),
             ),
-            child: Row(
-              children: [
-                const Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Ask me anything...',
-                    ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(39),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: 22.0,
+                  sigmaY: 22.0,
+                  tileMode: TileMode.decal
+                ),
+                child: Container(
+                  padding: const EdgeInsets.only(left: 16, right: 4, top: 4, bottom: 4),
+                  //color: Colors.transparent,
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Ask me anything...',
+                            hintStyle: TextStyle(
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ),
+                      ),
+                      _SendButtonAnimation(
+                        onPressed: () {
+                          // TODO: 处理发送消息
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                _SendButtonAnimation(
-                  onPressed: () {
-                    // TODO: 处理发送消息
-                  },
-                ),
-              ],
+              ),
             ),
           ),
         ],

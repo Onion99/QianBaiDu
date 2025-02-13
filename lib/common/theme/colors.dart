@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 const Color primaryColor = Color(0xffaadc8a);
 const Color primaryGradientColor = Color(0xFFC3DCA8);
 const Color secondaryColor = Color(0xFFDAD4E2);
+const Color blackBlurColor = Color(0x26000000);
 const Color accentColor = Color(0xFF2684FC);
 const Color selectColor = Color(0xFF2684FC);
 
