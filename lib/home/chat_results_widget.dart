@@ -33,7 +33,7 @@ class ChatResultsWidget extends StatelessWidget {
             end: Alignment.bottomCenter,
             colors: [
               secondaryColor,
-              primaryColor,
+              primaryGradientColor,
               secondaryColor,
               secondaryColor
             ],
