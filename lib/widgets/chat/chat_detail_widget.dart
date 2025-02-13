@@ -103,10 +103,10 @@ class ChatDetailWidget extends StatelessWidget {
           // 底部输入框
           const SizedBox(height: 12),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.only(left: 16,right: 4,top: 4,bottom: 4),
             decoration: BoxDecoration(
               color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(39),
             ),
             child: Row(
               children: [
