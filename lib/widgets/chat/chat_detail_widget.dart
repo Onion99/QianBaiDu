@@ -136,7 +136,15 @@ class ChatDetailWidget extends StatelessWidget {
                             hintStyle: TextStyle(
                               color: Colors.black54,
                             ),
+                            /*labelText: 'Ask me anything...',
+                            labelStyle: TextStyle(
+                              color: Colors.black54,
+                            ),*/
                           ),
+                          cursorColor: primaryColor,
+                          cursorRadius: Radius.circular(36),
+                          cursorWidth: 2,
+                          cursorHeight: 19,
                           onSubmitted: (value) {
                             // 触发发送按钮的动画和操作
                             sendButtonKey.currentState?.triggerSend();
