@@ -159,27 +159,33 @@ class ChatDetailWidget extends StatelessWidget {
                       ValueListenableBuilder<TextEditingValue>(
                         valueListenable: textController,
                         builder: (context, value, child) {
-                          return Visibility(
-                            visible: value.text.isNotEmpty,
-                            maintainSize: false,
-                            maintainAnimation: true,
-                            maintainState: true,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.clear,
-                                    size: 20,
-                                    color: Colors.black45,
-                                  ),
-                                  onPressed: () {
-                                    textController.clear();
-                                    focusNode.requestFocus();
-                                  },
+                          return AnimatedSize(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            child: AnimatedOpacity(
+                              opacity: value.text.isNotEmpty ? 1.0 : 0.0,
+                              duration: const Duration(milliseconds: 200),
+                              curve: Curves.easeInOut,
+                              child: SizedBox(
+                                width: value.text.isNotEmpty ? null : 0.0,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.clear,
+                                        size: 20,
+                                        color: Colors.black45,
+                                      ),
+                                      onPressed: () {
+                                        textController.clear();
+                                        focusNode.requestFocus();
+                                      },
+                                    ),
+                                    const SizedBox(width: 12),
+                                  ],
                                 ),
-                                const SizedBox(width: 12),
-                              ],
+                              ),
                             ),
                           );
                         },
