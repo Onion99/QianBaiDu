@@ -128,21 +128,21 @@ class ChatDetailWidget extends StatelessWidget {
                     children: [
                       Expanded(
                         child: TextField(
-                          controller: textController,  // 添加控制器
-                          focusNode: focusNode,       // 添加焦点节点
+                          controller: textController,
+                          focusNode: focusNode,
+                          maxLines: 2,  // 允许多行输入
+                          minLines: 1,     // 最小显示1行
+                          textInputAction: TextInputAction.newline,  // 回车键变为换行
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Ask me anything...',
                             hintStyle: TextStyle(
                               color: Colors.black54,
                             ),
-                            /*labelText: 'Ask me anything...',
-                            labelStyle: TextStyle(
-                              color: Colors.black54,
-                            ),*/
+                            contentPadding: EdgeInsets.symmetric(vertical: 8), // 调整垂直内边距
                           ),
                           cursorColor: primaryColor,
-                          cursorRadius: Radius.circular(36),
+                          cursorRadius: const Radius.circular(36),
                           cursorWidth: 2,
                           cursorHeight: 19,
                           onSubmitted: (value) {
