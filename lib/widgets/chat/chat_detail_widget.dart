@@ -61,8 +61,11 @@ class ChatDetailWidget extends StatelessWidget {
   }
 
   Widget _buildBottomFeatures() {
-    // 创建一个Controller引用以便访问动画控制器
     final sendButtonKey = GlobalKey<_SendButtonAnimationState>();
+    // 添加文本控制器
+    final textController = TextEditingController();
+    // 添加焦点控制器
+    final focusNode = FocusNode();
     
     return Container(
       padding: const EdgeInsets.all(16),
@@ -125,6 +128,8 @@ class ChatDetailWidget extends StatelessWidget {
                     children: [
                       Expanded(
                         child: TextField(
+                          controller: textController,  // 添加控制器
+                          focusNode: focusNode,       // 添加焦点节点
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Ask me anything...',
@@ -135,6 +140,10 @@ class ChatDetailWidget extends StatelessWidget {
                           onSubmitted: (value) {
                             // 触发发送按钮的动画和操作
                             sendButtonKey.currentState?.triggerSend();
+                            // 清空输入内容
+                            textController.clear();
+                            // 重新获取焦点
+                            focusNode.requestFocus();
                           },
                         ),
                       ),
@@ -142,6 +151,10 @@ class ChatDetailWidget extends StatelessWidget {
                         key: sendButtonKey,
                         onPressed: () {
                           // TODO: 处理发送消息
+                          // 清空输入内容
+                          textController.clear();
+                          // 保持焦点
+                          focusNode.requestFocus();
                         },
                       ),
                     ],
