@@ -155,6 +155,18 @@ class ChatDetailWidget extends StatelessWidget {
                           },
                         ),
                       ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.clear,
+                          size: 20,
+                          color: Colors.black45,
+                        ),
+                        onPressed: () {
+                          textController.clear();
+                          focusNode.requestFocus();
+                        },
+                      ),
+                      const SizedBox(width: 12),
                       _SendButtonAnimation(
                         key: sendButtonKey,
                         onPressed: () {
