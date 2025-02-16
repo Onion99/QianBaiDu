@@ -61,6 +61,9 @@ class ChatDetailWidget extends StatelessWidget {
   }
 
   Widget _buildBottomFeatures() {
+    // 创建一个Controller引用以便访问动画控制器
+    final sendButtonKey = GlobalKey<_SendButtonAnimationState>();
+    
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -118,21 +121,25 @@ class ChatDetailWidget extends StatelessWidget {
                 ),
                 child: Container(
                   padding: const EdgeInsets.only(left: 16, right: 4, top: 4, bottom: 4),
-                  //color: Colors.transparent,
                   child: Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: TextField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Ask me anything...',
                             hintStyle: TextStyle(
                               color: Colors.black54,
                             ),
                           ),
+                          onSubmitted: (value) {
+                            // 触发发送按钮的动画和操作
+                            sendButtonKey.currentState?.triggerSend();
+                          },
                         ),
                       ),
                       _SendButtonAnimation(
+                        key: sendButtonKey,
                         onPressed: () {
                           // TODO: 处理发送消息
                         },
@@ -175,9 +182,11 @@ class ChatDetailWidget extends StatelessWidget {
 
 class _SendButtonAnimation extends StatefulWidget {
   final VoidCallback onPressed;
+  final GlobalKey<_SendButtonAnimationState> key;
 
   const _SendButtonAnimation({
     required this.onPressed,
+    required this.key,
   });
 
   @override
@@ -253,5 +262,13 @@ class _SendButtonAnimationState extends State<_SendButtonAnimation>
         ),
       ),
     );
+  }
+
+  // 添加触发发送的方法
+  void triggerSend() {
+    _controller.forward().then((_) {
+      _controller.reverse();
+      widget.onPressed();
+    });
   }
 }
