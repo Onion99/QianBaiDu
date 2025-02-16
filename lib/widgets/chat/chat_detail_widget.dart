@@ -167,7 +167,6 @@ class ChatDetailWidget extends StatelessWidget {
                               duration: const Duration(milliseconds: 200),
                               curve: Curves.easeInOut,
                               child: SizedBox(
-                                width: value.text.isNotEmpty ? null : 0.0,
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
