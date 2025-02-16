@@ -155,25 +155,39 @@ class ChatDetailWidget extends StatelessWidget {
                           },
                         ),
                       ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.clear,
-                          size: 20,
-                          color: Colors.black45,
-                        ),
-                        onPressed: () {
-                          textController.clear();
-                          focusNode.requestFocus();
+                      // 使用ValueListenableBuilder监听文本变化
+                      ValueListenableBuilder<TextEditingValue>(
+                        valueListenable: textController,
+                        builder: (context, value, child) {
+                          return Visibility(
+                            visible: value.text.isNotEmpty,
+                            maintainSize: false,
+                            maintainAnimation: true,
+                            maintainState: true,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.clear,
+                                    size: 20,
+                                    color: Colors.black45,
+                                  ),
+                                  onPressed: () {
+                                    textController.clear();
+                                    focusNode.requestFocus();
+                                  },
+                                ),
+                                const SizedBox(width: 12),
+                              ],
+                            ),
+                          );
                         },
                       ),
-                      const SizedBox(width: 12),
                       _SendButtonAnimation(
                         key: sendButtonKey,
                         onPressed: () {
-                          // TODO: 处理发送消息
-                          // 清空输入内容
                           textController.clear();
-                          // 保持焦点
                           focusNode.requestFocus();
                         },
                       ),
