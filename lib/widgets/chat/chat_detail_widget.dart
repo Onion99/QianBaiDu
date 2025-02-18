@@ -3,8 +3,44 @@ import 'dart:ui'; // 为了使用 ImageFilter
 
 import '../../common/theme/colors.dart';
 
-class ChatDetailWidget extends StatelessWidget {
+class ChatDetailWidget extends StatefulWidget {
   const ChatDetailWidget({super.key});
+
+  @override
+  State<ChatDetailWidget> createState() => _ChatDetailWidgetState();
+}
+
+class _ChatDetailWidgetState extends State<ChatDetailWidget> {
+  final List<ChatMessage> _messages = [];
+  // 添加文本控制器
+  final TextEditingController _textController = TextEditingController();
+  // 添加滑动控制器
+  final ScrollController _scrollController = ScrollController();
+  // 添加焦点控制器
+  final FocusNode _focusNode = FocusNode();
+
+  void _handleSubmitted(String text) {
+    if (text.trim().isEmpty) return;
+
+    setState(() {
+      _messages.insert(
+          0,
+          ChatMessage(
+            text: text,
+            isUser: true,
+            timestamp: DateTime.now(),
+          ));
+    });
+
+    _textController.clear();
+
+    // 滚动到列表顶部
+    _scrollController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +56,14 @@ class ChatDetailWidget extends StatelessWidget {
             Expanded(
               child: Container(
                 color: Colors.grey[50],
-                // TODO: 这里添加聊天消息列表
+                child: ListView.builder(
+                  controller: _scrollController,
+                  reverse: true, // 消息从底部开始
+                  itemCount: _messages.length,
+                  itemBuilder: (context, index) {
+                    return _MessageItem(message: _messages[index]);
+                  },
+                ),
               ),
             ),
 
@@ -62,11 +105,7 @@ class ChatDetailWidget extends StatelessWidget {
 
   Widget _buildBottomFeatures() {
     final sendButtonKey = GlobalKey<_SendButtonAnimationState>();
-    // 添加文本控制器
-    final textController = TextEditingController();
-    // 添加焦点控制器
-    final focusNode = FocusNode();
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -117,19 +156,15 @@ class ChatDetailWidget extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(39),
               child: BackdropFilter(
-                filter: ImageFilter.blur(
-                  sigmaX: 22.0,
-                  sigmaY: 22.0,
-                  tileMode: TileMode.decal
-                ),
+                filter: ImageFilter.blur(sigmaX: 22.0, sigmaY: 22.0, tileMode: TileMode.decal),
                 child: Container(
                   padding: const EdgeInsets.only(left: 16, right: 4, top: 4, bottom: 4),
                   child: Row(
                     children: [
                       Expanded(
                         child: TextField(
-                          controller: textController,
-                          focusNode: focusNode,
+                          controller: _textController,
+                          focusNode: _focusNode,
                           maxLines: 2,  // 允许多行输入
                           minLines: 1,     // 最小显示1行
                           textInputAction: TextInputAction.newline,  // 回车键变为换行
@@ -141,23 +176,12 @@ class ChatDetailWidget extends StatelessWidget {
                             ),
                             contentPadding: EdgeInsets.symmetric(vertical: 8), // 调整垂直内边距
                           ),
-                          cursorColor: primaryColor,
-                          cursorRadius: const Radius.circular(36),
-                          cursorWidth: 2,
-                          cursorHeight: 19,
-                          onSubmitted: (value) {
-                            // 触发发送按钮的动画和操作
-                            sendButtonKey.currentState?.triggerSend();
-                            // 清空输入内容
-                            textController.clear();
-                            // 重新获取焦点
-                            focusNode.requestFocus();
-                          },
+                          onSubmitted: _handleSubmitted,
                         ),
                       ),
                       // 使用ValueListenableBuilder监听文本变化
                       ValueListenableBuilder<TextEditingValue>(
-                        valueListenable: textController,
+                        valueListenable: _textController,
                         builder: (context, value, child) {
                           return AnimatedSize(
                             duration: const Duration(milliseconds: 200),
@@ -177,8 +201,8 @@ class ChatDetailWidget extends StatelessWidget {
                                         color: Colors.black45,
                                       ),
                                       onPressed: () {
-                                        textController.clear();
-                                        focusNode.requestFocus();
+                                        _textController.clear();
+                                        _focusNode.requestFocus();
                                       },
                                     ),
                                     const SizedBox(width: 12),
@@ -191,10 +215,7 @@ class ChatDetailWidget extends StatelessWidget {
                       ),
                       _SendButtonAnimation(
                         key: sendButtonKey,
-                        onPressed: () {
-                          textController.clear();
-                          focusNode.requestFocus();
-                        },
+                        onPressed: () => _handleSubmitted(_textController.text),
                       ),
                     ],
                   ),
@@ -225,6 +246,61 @@ class ChatDetailWidget extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(fontSize: 13), // 调整文字大小
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ChatMessage {
+  final String text;
+  final bool isUser;
+  final DateTime timestamp;
+
+  ChatMessage({
+    required this.text,
+    required this.isUser,
+    required this.timestamp,
+  });
+}
+
+class _MessageItem extends StatelessWidget {
+  final ChatMessage message;
+
+  const _MessageItem({
+    required this.message,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        mainAxisAlignment: message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        children: [
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.7,
+            ),
+            decoration: BoxDecoration(
+              color: message.isUser ? Colors.blue[100] : Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 5,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Text(
+              message.text,
+              style: TextStyle(
+                color: message.isUser ? Colors.black87 : Colors.black,
+              ),
+            ),
           ),
         ],
       ),
