@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'dart:ui'; // 为了使用 ImageFilter
 
@@ -23,23 +25,53 @@ class _ChatDetailWidgetState extends State<ChatDetailWidget> {
     if (text.trim().isEmpty) return;
 
     setState(() {
-      _messages.insert(
-          0,
+      _messages.add(ChatMessage(
+        text: text,
+        isUser: true,
+        timestamp: DateTime.now(),
+      ));
+      /*_messages.insert(0,
           ChatMessage(
             text: text,
             isUser: true,
             timestamp: DateTime.now(),
-          ));
+          ));*/
     });
 
     _textController.clear();
 
     // 滚动到列表顶部
-    _scrollController.animateTo(
+    /*_scrollController.animateTo(
       0.0,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
-    );
+    );*/
+    // 滚动到底部
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
+    // 模拟AI回复
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        _messages.add(ChatMessage(
+          text: "这是一个AI助手的自动回复消息,${Random(100).nextInt(100)}",
+          isUser: false,
+          timestamp: DateTime.now(),
+        ));
+      });
+    });
+    // 再次滚动到底部
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
   }
 
   @override
@@ -58,7 +90,7 @@ class _ChatDetailWidgetState extends State<ChatDetailWidget> {
                 color: Colors.grey[50],
                 child: ListView.builder(
                   controller: _scrollController,
-                  reverse: true, // 消息从底部开始
+                  reverse: false, // 消息从底部开始
                   itemCount: _messages.length,
                   itemBuilder: (context, index) {
                     return _MessageItem(message: _messages[index]);
@@ -112,7 +144,7 @@ class _ChatDetailWidgetState extends State<ChatDetailWidget> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // 功能按钮网格
-          ConstrainedBox(
+          /*ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 200), // 限制最大高度
             child: GridView.count(
               shrinkWrap: true,
@@ -144,7 +176,7 @@ class _ChatDetailWidgetState extends State<ChatDetailWidget> {
                 ),
               ],
             ),
-          ),
+          ),*/
 
           // 底部输入框
           const SizedBox(height: 12),
