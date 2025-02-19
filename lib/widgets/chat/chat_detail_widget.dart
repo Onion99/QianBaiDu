@@ -14,6 +14,7 @@ class ChatDetailWidget extends StatefulWidget {
 
 class _ChatDetailWidgetState extends State<ChatDetailWidget> {
   final List<ChatMessage> _messages = [];
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   // 添加文本控制器
   final TextEditingController _textController = TextEditingController();
   // 添加滑动控制器
@@ -30,12 +31,10 @@ class _ChatDetailWidgetState extends State<ChatDetailWidget> {
         isUser: true,
         timestamp: DateTime.now(),
       ));
-      /*_messages.insert(0,
-          ChatMessage(
-            text: text,
-            isUser: true,
-            timestamp: DateTime.now(),
-          ));*/
+      _listKey.currentState?.insertItem(
+        _messages.length - 1,
+        duration: const Duration(milliseconds: 300),
+      );
     });
 
     _textController.clear();
@@ -62,15 +61,19 @@ class _ChatDetailWidgetState extends State<ChatDetailWidget> {
           isUser: false,
           timestamp: DateTime.now(),
         ));
+        _listKey.currentState?.insertItem(
+          _messages.length - 1,
+          duration: const Duration(milliseconds: 300),
+        );
       });
-    });
-    // 再次滚动到底部
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
+      // 再次滚动到底部
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      });
     });
   }
 
@@ -88,14 +91,22 @@ class _ChatDetailWidgetState extends State<ChatDetailWidget> {
             Expanded(
               child: Container(
                 color: Colors.grey[50],
-                child: ListView.builder(
-                  controller: _scrollController,
-                  reverse: false, // 消息从底部开始
-                  itemCount: _messages.length,
-                  itemBuilder: (context, index) {
-                    return _MessageItem(message: _messages[index]);
-                  },
-                ),
+                  child: AnimatedList(
+                    key: _listKey,
+                    controller: _scrollController,
+                    initialItemCount: _messages.length,
+                    itemBuilder: (context, index, animation) {
+                      return SlideTransition(
+                        position: animation.drive(Tween(begin: const Offset(0.0, 0.5), end: const Offset(0.0, 0.0),).chain(CurveTween(curve: Curves.easeOut)),),
+                        child: FadeTransition(
+                          opacity: animation.drive(
+                            Tween(begin: 0.0, end: 1.0,).chain(CurveTween(curve: Curves.easeOut)),
+                          ),
+                          child: _MessageItem(message: _messages[index],),
+                        ),
+                      );
+                    },
+                  ),
               ),
             ),
 
